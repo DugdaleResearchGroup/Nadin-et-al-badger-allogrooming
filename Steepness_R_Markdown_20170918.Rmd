@@ -1,0 +1,132 @@
+---
+title: "Steepness_R_Markdown"
+author: "Hannah Dugdale"
+date: "18 September 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
+```
+
+```{r, echo=FALSE}
+## Install 'steepness' library 
+#install.packages("steepness")
+rm(list=ls())
+library(steepness)
+sessionInfo() 
+```
+
+## R Markdown
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+## Read in the data
+```{r }
+SH_unrecip <- matrix(c(0, 0, 0, 7, 13, 0, 0, 0, 0, 0, 0, 9, 0, 0, 
+0, 0, 0, 3, 4, 0, 3, 2, 0, 0, 0, 2, 0, 0, 
+0, 0, 0, 3, 0, 4, 0, 0, 0, 0, 0, 0, 4, 3, 
+0, 5, 0, 0, 2, 0, 0, 1, 0, 0, 2, 6, 7, 0, 
+13, 4, 0, 2, 0, 3, 3, 3, 0, 0, 0, 3, 6, 8, 
+0, 4, 0, 3, 3, 0, 0, 6, 5, 0, 0, 3, 6, 0, 
+0, 3, 0, 4, 3, 0, 0, 14, 4, 0, 0, 10, 6, 6, 
+0, 5, 0, 4, 6, 6, 0, 0, 0, 0, 0, 2, 0, 2, 
+0, 0, 0, 22, 8, 0, 0, 5, 0, 0, 0, 0, 0, 5, 
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 2, 0, 3, 5, 2, 0, 0, 0, 3, 0, 0, 
+0, 3, 0, 10, 0, 3, 2, 2, 0, 0, 3, 0, 3, 3, 
+0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 
+0, 6, 3, 7, 3, 0, 0, 0, 5, 0, 0, 3, 9, 0),
+                  nrow=14,byrow=TRUE)
+SH_unrecip_names <- c(306,	419,	285,	436,	460,	134,	1,	340,	343,	286,	277,	437,	435,	429)
+SH_unrecip
+
+P95_unrecip <- matrix(c(0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 17, 0, 7, 0, 0,
+11, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0,
+0, 0, 14, 20, 0, 25, 0, 10, 0, 0, 0,
+3, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 4, 0, 0, 0, 0, 0, 8, 3,
+30, 0, 0, 0, 10, 0, 0, 0, 4, 0, 0,
+0, 0, 0, 0, 0, 7, 0, 0, 0, 10, 0,
+8, 0, 0, 6, 0, 14, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 0),
+                  nrow=11,byrow=TRUE)
+P95_unrecip_names <- c(327,	217,	232,	008,	221,	242,	300,	301,	380,	287,	367) #008=H
+P95_unrecip
+
+P2004_unrecip <- matrix(c(0, 10, 2, 20, 24, 3, 6,
+1, 0, 4, 4, 9, 3, 0,
+3, 16, 0, 29, 9, 5, 0,
+2, 4, 6, 0, 3, 2, 0,
+13, 6, 5, 8, 0, 7, 0,
+4, 3, 3, 4, 11, 0, 7,
+3, 0, 0, 0, 0, 20, 0),
+                  nrow=7,byrow=TRUE)
+P2004_unrecip_names <- c(507,	533,	660,	713,	816,	819,	863) #507=507F
+P2004_unrecip
+
+PO2004_unrecip <- matrix(c(0, 0, 0, 5, 11, 0, 15,
+2, 0, 11, 9, 9, 0, 12,
+3, 3, 0, 7, 10, 25, 23,
+3, 4, 0, 0, 5, 0, 15,
+1, 2, 2, 10, 0, 0, 8,
+0, 0, 0, 0, 0, 0, 0,
+4, 0, 15, 10, 6, 0, 0),
+                  nrow=7,byrow=TRUE)
+PO2004_unrecip_names <- c(491,	65,	323,	497,	534,	765,	917) #491=491M, 65=65W
+PO2004_unrecip
+
+P2005_unrecip <- matrix(c(0, 17, 3, 16, 22, 17, 8, 10, 55,
+1, 0, 6, 7, 22, 5, 4, 3, 22,
+0, 0, 0, 2, 3, 0, 5, 0, 10,
+4, 8, 12, 0, 5, 9, 6, 5, 42,
+5, 4, 0, 5, 0, 6, 2, 11, 23,
+7, 12, 4, 1, 8, 0, 2, 8, 0,
+3, 4, 14, 6, 2, 7, 0, 17, 0,
+4, 50, 120, 7, 20, 32, 22, 0, 59,
+0, 11, 10, 0, 23, 0, 8, 6, 0),
+                  nrow=9,byrow=TRUE)
+P2005_unrecip_names <- c(0002,	660,	713,	819,	968,	979,	972,	507,	816) #0002=B, 507=507F
+P2005_unrecip
+
+PO2005_unrecip <- matrix(c(0, 0, 6, 11, 6,
+11, 0, 3, 20, 35,
+9, 3, 0, 16, 11,
+3, 7, 4, 0, 8,
+2, 0, 9, 3, 0),
+                  nrow=5,byrow=TRUE)
+PO2005_unrecip_names <- c(491,	65,	323,	917,	959) #491=491M, 65=65W
+PO2005_unrecip
+```
+
+## Run the steepness analyses
+```{r }
+# print(getStp(SH_unrecip, names=SH_unrecip_names, method="Dij",digits=3) # Gives the slope of the steepness test
+      # Dij = matrix of dominance indices corrected for chance; Pij = matrix of proportion of wins
+SH_unrecipSTP <- steeptest(SH_unrecip, names=SH_unrecip_names, rep=10000, method="Dij", order=TRUE)
+summary(SH_unrecipSTP)
+plot(SH_unrecipSTP)
+
+P95_unrecipSTP <- steeptest(P95_unrecip, names=P95_unrecip_names, rep=10000, method="Dij", order=TRUE)
+summary(P95_unrecipSTP)
+plot(P95_unrecipSTP)
+
+P2004_unrecipSTP <- steeptest(P2004_unrecip, names=P2004_unrecip_names, rep=10000, method="Dij", order=TRUE)
+summary(P2004_unrecipSTP)
+plot(P2004_unrecipSTP)
+
+PO2004_unrecipSTP <- steeptest(PO2004_unrecip, names=PO2004_unrecip_names, rep=10000, method="Dij", order=TRUE)
+summary(PO2004_unrecipSTP)
+plot(PO2004_unrecipSTP)
+
+P2005_unrecipSTP <- steeptest(P2005_unrecip, names=P2005_unrecip_names, rep=10000, method="Dij", order=TRUE)
+summary(P2005_unrecipSTP)
+plot(P2005_unrecipSTP)
+
+PO2005_unrecipSTP <- steeptest(PO2005_unrecip, names=PO2005_unrecip_names, rep=10000, method="Dij", order=TRUE)
+summary(PO2005_unrecipSTP)
+plot(PO2005_unrecipSTP)
+```
+
